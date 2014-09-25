@@ -44,6 +44,7 @@
     <Compile Include="Abstract\Force.cs" />
     <Compile Include="Abstract\Graph.cs" />
     <Compile Include="Abstract\Movement.cs" />
+    <Compile Include="Abstract\ProcessState.cs" />
     <Compile Include="Abstract\State.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

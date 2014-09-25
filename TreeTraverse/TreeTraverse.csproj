@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abstract\Assumption.cs" />
     <Compile Include="Abstract\Force.cs" />
     <Compile Include="Abstract\Graph.cs" />
     <Compile Include="Abstract\Movement.cs" />

@@ -62,7 +62,7 @@ class InnerClass : ProcessState
 		foreach (var v in NewlySaturatedVertices()) {
 			PropagateForce (v);
 		}
-
+		..XSZ
 		unpropagatedForces.Clear ();
 	}
 

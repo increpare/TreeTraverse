@@ -51,7 +51,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstract\Edge.cs" />
     <Compile Include="Abstract\Vertex.cs" />
-    <Compile Include="Abstract\Outline.cs" />
     <Compile Include="Abstract\Outline2.cs" />
     <Compile Include="Abstract\Outline3.cs" />
     <Compile Include="Abstract\InnerClass.cs" />

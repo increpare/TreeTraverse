@@ -4,31 +4,31 @@ using System.Linq;
 class Outline
 {
 
-	public void RunAlgorithm(Process state) {
+	public void RunAlgorithm(State state) {
 		state.Propagate ();
 
-		Edge e = state.UnspecifiedPassiveEdge();
+		Edge e = state.s.UnspecifiedPassiveEdge();
 		if (e == null) {
 			return;
 		} 
 
-		var assumptions = state.GenerateAssumptions (e);
+		var assumptions = state.s.GenerateAssumptions (e);
 
-		Process[] newStates = new Process[assumptions.Length];
+		State[] newStates = new State[assumptions.Length];
 		for (int i = 0; i < assumptions.Length; i++) {
-			var newState = newStates[i] = (Process)state.Clone ();
-			newState.Presume (assumptions [i]);
+			var newState = newStates[i] = (State)state.Clone ();
+			newState.s.Presume (assumptions [i]);
 			RunAlgorithm (newState);
-			if (newState.NoSlip (e)) {
-				state.SetState (newState);
+			if (newState.s.NoSlip (e)) {
+				state.s.SetState (newState.s);
 				return;
 			}			
 		}
 
-		state.SetState (newStates[0]);//first one will always assume non-rolling
+		state.s.SetState (newStates[0].s);//first one will always assume non-rolling
 	}
 
-	public void DoStuff(Process state) {
+	public void DoStuff(State state) {
 		RunAlgorithm (state);
 	}
 }

@@ -16,7 +16,7 @@ class Program
 
     static void Main(string[] args)
     {
-        var s = new State();
+        var s = new GameGraph();
 		Console.WriteLine ("Hello World");
     }
 }

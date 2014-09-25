@@ -6,160 +6,130 @@ using System.Threading.Tasks;
 
 class State
 {
-    public Graph graph = new Graph();
-    public List<Movement> movements = new List<Movement>();
-    public List<Force> forces = new List<Force>();
-    public List<Movement> unpropagatedmovements = new List<Movement>();
+    public Graph g;
 
-    public State Clone()
+    public List<Movement> unpropagatedMovements;
+    public List<Force> unpropagatedForces;
+    public List<Movement> movements;
+    public List<Force> forces;
+
+    public void AddMovement(Vertex v, Movement m)
     {
-        var s = new State();
-        s.graph = graph;
-        s.movements = new List<Movement>(movements);
-        s.forces = new List<Force>(forces);
-        s.unpropagatedmovements = new List<Movement>(unpropagatedmovements);
-        return s;
     }
 
-    public static State NewState(){
-        var s = new State();
-        /*
-        graph.vertices = new List<Vertex>()
-        {
-            new Vertex("player"),
-            new Vertex("sausage1"),
-            new Vertex("sausage2"),
-            new Vertex("sausage3"),
-            new Vertex("sausage4")
-        };
-
-        graph.edges = new List<Edge>() {
-            new Edge("player","sausage1"),
-            new Edge("sausage1","sausage2"),
-            new Edge("sausage1","sausage2"),
-            new Edge("sausage2","sausage3",true),
-            new Edge("sausage2","sausage4",true)
-        };
-        */
-
-        s.graph.vertices = new Vertex[] 
-        {
-            new Vertex("player"),
-            new Vertex("sausage1",true),
-            new Vertex("sausage2"),
-            new Vertex("island"),
-            new Vertex("ground")
-        };
-
-        s.graph.edges = new Edge[] {
-            new Edge("player","ground",true),
-            new Edge("sausage1","ground",true),
-            new Edge("player","sausage1"),
-            new Edge("sausage1","sausage2",true),
-            new Edge("sausage2","island"),
-            new Edge("island","sausage2"),
-        };
-
-        s.movements = new List<Movement>() {
-            new Movement(1,0,"player"),
-        };
-        
-        s.unpropagatedmovements = new List<Movement>(s.movements);
-
-        return s;
+    public void AddForce(Force f)
+    {
     }
 
-/*
-    private void AddUnderForces(Vertex v, List<Force> incoming)
+    public List<Force> ForcesOn(Vertex v)
     {
-        var under = graph.Under(v);
-        foreach (var g in under)
+        return null;
+    }
+
+    public Movement getMovement(Vertex v)
+    {
+        return null;
+    }
+
+    public Force getForce(Vertex from, Vertex to)
+    {
+        return new Force();
+    }
+
+    public Force getForce(Edge e)
+    {
+        return new Force();
+    }
+
+    public int Speed(Vertex v)
+    {
+        return 0;
+    }
+
+    //traces backwards so long as everything before has an equal speed to this (and this has >0 speed)
+    public List<Vertex> TraceBackwards(Vertex v, List<Vertex> vs)
+    {
+        List<Vertex> result = new List<Vertex>() { v };
+        int speed = Speed(v);
+        if (speed == 0)
         {
-            if (incoming.Any(F => F.target.from == g))
+            return result;
+        }
+
+        bool added = true;
+        while (added)
+        {
+            added = false;
+            foreach (var f in forces)
+            {
+                if (!f.target.passive &&
+                    result.Contains(f.target.to) &&
+                    !result.Contains(f.target.from) &&
+                    getMovement(f.target.from).speed == speed)
+                {
+                    result.Add(f.target.from);
+                    added = true;
+                }
+            }
+        }
+        return result;
+    }
+
+    //should these care about active forces? i don't think so?
+    public List<Vertex> NewlySaturatedVertices()
+    {
+        var result = new List<Vertex>();
+        foreach (var v in g.vertices)
+        {
+            if (getMovement(v)!=null)
             {
                 continue;
             }
-
-            var m = new Movement(0, 0, g.name);
-            var e = new Edge(g.name, v.name, true);
-            var f = new Force(e, m);
-            if (!movements.Contains(m))
+            if (ForcesOn(v).Count == g.outgoing(v).Length)
             {
-                movements.Add(m);
-            }
-            incoming.Add(f);
-            //don't need to add to unpropagated movements
-            forces.Add(f);
-        }
-    }*/
-
-    private Movement ConsolidateForces(Vertex v, List<Force> incoming)
-    {
-        int speed = 0;
-        int rolling = 0;
-
-        List<Force> activeforces = incoming.Where(f => !f.target.passive ).ToList();
-        List<Force> passiveforces = incoming.Where(f => f.target.passive).ToList();
-        
-        int activespeed = activeforces.Max(f => f.movement.speed);
-
-        bool passiveParallel = passiveforces.All(f => f.movement.target.canRoll);
-        var contactSpeeds = passiveforces.Select(f => f.movement.ContactSpeed()).Distinct();
-        bool uniformContactSurface = contactSpeeds.Count()==1;
-        int contactSpeed = contactSpeeds.Min();
-        var rollings = passiveforces.Select(f => f.movement.rolling).Distinct();
-        bool uniformPassiveRollings = rollings.Count() == 1;
-
-        bool shouldRoll = v.canRoll && uniformContactSurface && uniformPassiveRollings;
-
-        if (shouldRoll)
-        {
-            var underRoll = rollings.First();
-            rolling = -underRoll;
-            speed = contactSpeed + rolling;
-            if (speed < activespeed)
-            {
-                rolling = 0;
-                speed = activespeed;
+                result.Add(v);
             }
         }
-        else
-        {
-            speed = Math.Max(contactSpeed,activespeed);
-        }        
-
-        Movement m = new Movement(speed,rolling,v.name);
-        return m;
+        return result;
     }
 
-    private void CalculateMovement(Vertex v) 
+    public List<Vertex> UnsaturatedVertices()
     {
-        var incoming = forces.Where(f => f.target.to == v).ToList();
-        var m = ConsolidateForces(v, incoming);
-        movements.Add(m);
-        unpropagatedmovements.Add(m);
+        return null;
     }
 
-    public void PropagateMovements()
+
+    public void Presume(Assumption a)
     {
-        int unpropagatedCount = unpropagatedmovements.Count;
-
-        foreach (var m in unpropagatedmovements)
-        {
-            var outs = graph.outgoing(m.target);            
-            foreach (var o in outs){
-                forces.Add(new Force(o,m));
-            }
-        }
-
-        var forceTargets = graph.vertices.Where(v => forces.Any(f => f.target.to == v)).ToList();
-
-        foreach (var forceTarget in forceTargets)
-        {
-            CalculateMovement(forceTarget);
-        }
-
-        unpropagatedmovements.RemoveRange(0, unpropagatedCount);
     }
 
+    public Edge UnspecifiedPassiveEdge()
+    {
+        return null;
+    }
+
+    //are there actually 3 possible assumptions here, or only 2? (not moving/moving in sync)
+    //there's a possibility of moving at every slower speed, I guess. O_-
+    //if it's moving faster, it may as well be doing nothing at all (other than nuking rolling ability -
+    //so options are - move in sync, move at same speed without rolling,move at every speed below that until zero
+    //non-moving should be the final option.
+    //obviously should only roll if it *can* roll.
+    public Assumption[] GenerateAssumptions(Edge E)
+    {
+        return new Assumption[0];
+    }
+
+    public State Clone()
+    {
+        return this;
+    }
+
+    public bool NoSlip(Edge E)
+    {
+        return false;
+    }
+
+    public void SetState(State other)
+    {
+    }
 }

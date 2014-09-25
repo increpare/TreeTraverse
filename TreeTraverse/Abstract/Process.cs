@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 
-class InnerClass : ProcessState
+class Process : State
 {
 	private void PropagateMovement(Movement m) {
             
@@ -20,34 +20,6 @@ class InnerClass : ProcessState
 		var movement = Force.Aggregate(forces);
 		AddMovement (v, movement);
 	}			
-
-	//traces backwards so long as everything before has an equal speed to this (and this has >0 speed)
-	private List<Vertex> TraceBackwards(Vertex v, List<Vertex> vs) { 
-		List<Vertex> result = new List<Vertex> (){v};          
-        int speed = Speed(v);
-        if (speed == 0)
-        {
-            return result;
-        }
-
-        bool added = true;
-        while (added)
-        {
-            added = false;
-            foreach (var f in forces)
-            {
-                if (!f.target.passive &&
-                    result.Contains(f.target.to) && 
-                    !result.Contains(f.target.from) &&
-                    getMovement(f.target.from).speed==speed)
-                {
-                    result.Add(f.target.from);
-                    added = true;
-                }
-            }
-        }
-        return result;
-	}
 
 	//adds forces from movements
 	private void PropagateMovements(){

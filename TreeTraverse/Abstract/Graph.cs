@@ -6,19 +6,24 @@ using System.Threading.Tasks;
 
 class Graph
 {
-    public List<Edge> edges;
-    public List<Vertex> vertices;
+    public Vertex[] vertices;
+    public Edge[] edges;
 
-    public List<Edge> outgoing(Vertex v) {
-        return edges.Where(e => e.from == v).ToList();
+    public Edge[] outgoing(Vertex v)
+    {
+        return new Edge[0];
+    }
+    public Edge[] incoming(Vertex v)
+    {
+        return new Edge[0];
+    }
+    public Vertex[] outgoingV(Vertex v)
+    {
+        return new Vertex[0];
+    }
+    public Vertex[] incomingV(Vertex v)
+    {
+        return new Vertex[0];
     }
 
-    public List<Edge> incoming(Vertex v) {
-        return edges.Where(e => e.to == v).ToList();
-    }
-
-
-    public List<Vertex> Under(Vertex v1) {
-        return vertices.Where(v2 => edges.Any(e => e.passive && e.from == v2 && e.to == v1)).ToList();
-    }
 }

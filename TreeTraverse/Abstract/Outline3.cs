@@ -15,6 +15,7 @@ public class Outline3
 		//so options are - move in sync, move at same speed without rolling,move at every speed below that until zero
 		//non-moving should be the final option.
 		//obviously should only roll if it *can* roll.
+        //no, it should be in opposite order - go for lowest energy state
 		Assumption[] GenerateAssumptions(Edge E);
 
 		MyState Clone();
@@ -53,7 +54,7 @@ public class Outline3
 			}			
 		}
 
-		state.SetState (newStates.Last());//last one will always assume non-rolling
+		state.SetState (newStates[0]);//first one will always assume non-rolling
 	}
 
 	public void DoStuff(MyState state) {

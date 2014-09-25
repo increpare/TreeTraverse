@@ -2,50 +2,10 @@
 using System.Linq;
 using System.Collections.Generic;
 
-public class InnerClass
+class InnerClass
 {
 	public interface Assumption {
 	}
-
-	public class Graph{
-		public Vertex[] vertices;
-		public Edge[] edges;
-
-		public Edge[] outgoing(Vertex v) {
-			return new Edge[0];
-		}
-		public Edge[] incoming(Vertex v) {
-			return new Edge[0];
-		}
-		public Vertex[] outgoingV(Vertex v) {
-			return new Vertex[0];
-		}
-		public Vertex[] incomingV(Vertex v) {
-			return new Vertex[0];
-		}
-
-	}
-
-	public interface Vertex{
-	}
-
-	public class Edge {
-		public Vertex from;
-		public Vertex to;
-	}
-
-	public class Force {
-		public Edge target;
-		public bool passive;
-	}
-
-	public class Movement {
-		public Vertex target;
-		public bool DependsOn (Force f) {
-			return false;
-		}
-	}
-
 
 	public class MyState {
 		Graph g;
@@ -56,6 +16,11 @@ public class InnerClass
 		List<Force> forces;
 
 		private void PropagateMovement(Movement m) {
+            var outgoing = g.outgoing(m.target);
+            foreach (var e in outgoing)
+            {
+                AddForce(new Force(e,m));
+            }
 		}
 			
 		private void AddMovement(Vertex v, Movement m) {
@@ -72,18 +37,24 @@ public class InnerClass
 		}
 			
 		private Movement AggregateForces(List<Force> forces) {
-			return new Movement ();
+			return null;
 		}
 
 		private List<Force> ForcesOn(Vertex v) {
-			
+            return null;
 		}
 
-		private Movement Movement(Vertex from, Vertex to) {
-			return null;
+        private Movement Movement(Vertex v)
+        {
+            return null;
+        }
+
+        private Force Force(Vertex from, Vertex to)
+        {
+			return new Force();
 		}
-		private Movement Movement(Edge e) {
-			return null;
+		private Force Force(Edge e) {
+			return new Force();
 		}
 
 		private int Speed(Vertex v){
@@ -92,24 +63,30 @@ public class InnerClass
 
 		//traces backwards so long as everything before has an equal speed to this (and this has >0 speed)
 		private List<Vertex> TraceBackwards(Vertex v, List<Vertex> vs) { 
-			List<Vertex> result = new List<Vertex> (){};
-			int speed = Speed (v);
-			if (speed == 0) {
-				return result;
-			}
-				
-			var candidates = g.incomingV (v).Where (w => Speed (w) == speed);
+			List<Vertex> result = new List<Vertex> (){v};          
+            int speed = Speed(v);
+            if (speed == 0)
+            {
+                return result;
+            }
 
-			bool anyadded = false;
-			foreach (var cand in candidates) {
-				if (cand in vs) {
-					continue;
-				}
-			}
-			result = result.Concat (connectedFrom).Distinct().ToList();
-
-			//try to do this recursively
-			return result;
+            bool added = true;
+            while (added)
+            {
+                added = false;
+                foreach (var f in forces)
+                {
+                    if (!f.target.passive &&
+                        result.Contains(f.target.to) && 
+                        !result.Contains(f.target.from) &&
+                        Movement(f.target.from).speed==speed)
+                    {
+                        result.Add(f.target.from);
+                        added = true;
+                    }
+                }
+            }
+            return result;
 		}
 
 		//adds forces from movements
@@ -122,8 +99,21 @@ public class InnerClass
 
 		//should these care about active forces? i don't think so?
 		private List<Vertex> NewlySaturatedVertices() {
-			return null;
+            var result = new List<Vertex>();
+            foreach (var v in g.vertices)
+            {
+                if (movements.Any(m => m.target == v))
+                {
+                    continue;
+                }
+                if (ForcesOn(v).Count == g.outgoing(v).Length)
+                {
+                    result.Add(v);
+                }
+            }
+			return result;
 		}
+
 		private List<Vertex> UnsaturatedVertices() {
 			return null;
 		}
@@ -131,7 +121,7 @@ public class InnerClass
 		//adds movements to saturated vertices
 		private void PropagateForces(){
 			foreach (var v in NewlySaturatedVertices()) {
-				PropagateForces (v);
+				PropagateForce (v);
 			}
 
 			unpropagatedForces.Clear ();

@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-struct Movement
+class Movement
 {
-//    public int direction; -- not strictly necessary - direction can be global for a given turn
-    public readonly int speed;
-    public readonly int rolling;
-    public readonly Vertex target;
-
+    public int speed;
+    public int rolling;
+    public Vertex target;
+    public bool DependsOn(Force f)
+    {
+        return false;
+    }    
     public Movement(int speed, int rolling, string target)
     {
         this.speed = speed;

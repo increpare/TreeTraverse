@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 struct Force
 {
     public readonly Edge target;
@@ -23,6 +24,12 @@ struct Force
     public Vertex to()
     {
         return target.to;
+    }
+
+
+    public static Movement Aggregate(List<Force> forces)
+    {
+        return null;
     }
 
 }

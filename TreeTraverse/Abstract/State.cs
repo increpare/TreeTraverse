@@ -42,7 +42,7 @@ class State
         };
         */
 
-        s.graph.vertices = new List<Vertex>()
+        s.graph.vertices = new Vertex[] 
         {
             new Vertex("player"),
             new Vertex("sausage1",true),
@@ -51,7 +51,7 @@ class State
             new Vertex("ground")
         };
 
-        s.graph.edges = new List<Edge>() {
+        s.graph.edges = new Edge[] {
             new Edge("player","ground",true),
             new Edge("sausage1","ground",true),
             new Edge("player","sausage1"),

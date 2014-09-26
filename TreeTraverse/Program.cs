@@ -16,7 +16,9 @@ class Program
 
     static void Main(string[] args)
     {
-        var s = new GameGraph();
+		var s = State.NewState ();
+		s.Propagate ();
+		Console.WriteLine (s.s.movements.Count);
 		Console.WriteLine ("Hello World");
     }
 }

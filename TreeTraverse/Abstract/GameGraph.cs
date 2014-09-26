@@ -9,26 +9,35 @@ class GameGraph
     public Graph g;
 
     public List<Movement> unpropagatedMovements;
-    public List<Force> unpropagatedForces;
     public List<Movement> movements;
     public List<Force> forces;
 
-    public void AddMovement(Vertex v, Movement m)
+	public GameGraph(){
+		g = new Graph ();
+		unpropagatedMovements = new List<Movement> ();
+		movements = new List<Movement> ();
+		forces = new List<Force> ();
+	}
+
+    public void AddMovement(Movement m)
     {
+		movements.Add (m);
+		unpropagatedMovements.Add (m);
     }
 
     public void AddForce(Force f)
     {
+		forces.Add (f);
     }
 
     public List<Force> ForcesOn(Vertex v)
     {
-        return null;
+		return forces.Where (f => f.target.to == v).ToList ();
     }
 
     public Movement getMovement(Vertex v)
     {
-        return null;
+		return movements.FirstOrDefault (m => m.target == v);
     }
 
     public Force getForce(Vertex from, Vertex to)
@@ -85,19 +94,15 @@ class GameGraph
             {
                 continue;
             }
-            if (ForcesOn(v).Count == g.outgoing(v).Length)
+			var forcesOn = ForcesOn (v);
+			var inComing = g.incoming (v);
+			if ((inComing.Length>0)&&(inComing.Length==forcesOn.Count))
             {
                 result.Add(v);
             }
         }
         return result;
     }
-
-    public List<Vertex> UnsaturatedVertices()
-    {
-        return null;
-    }
-
 
     public void Presume(Assumption a)
     {

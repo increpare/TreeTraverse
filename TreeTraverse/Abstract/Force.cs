@@ -29,7 +29,10 @@ struct Force
 
     public static Movement Aggregate(List<Force> forces)
     {
-        return null;
+		if (forces.Count == 1) {
+			return forces [0].movement;
+		}
+		return forces [0].movement;
     }
 
 }

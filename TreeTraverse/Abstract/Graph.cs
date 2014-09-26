@@ -11,19 +11,19 @@ class Graph
 
     public Edge[] outgoing(Vertex v)
     {
-        return new Edge[0];
+		return edges.Where (e => e.from == v).ToArray ();
     }
     public Edge[] incoming(Vertex v)
-    {
-        return new Edge[0];
+	{
+		return edges.Where (e => e.to == v).ToArray ();
     }
     public Vertex[] outgoingV(Vertex v)
-    {
-        return new Vertex[0];
+	{		
+		return edges.Where (e => e.from == v).Select(e=>e.to).ToArray ();
     }
     public Vertex[] incomingV(Vertex v)
-    {
-        return new Vertex[0];
+	{
+		return edges.Where (e => e.to == v).Select(e=>e.from).ToArray ();
     }
 
 }

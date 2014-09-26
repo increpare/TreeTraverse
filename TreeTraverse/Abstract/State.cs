@@ -7,6 +7,40 @@ class State
 {
 	public GameGraph s;
 
+
+	public static State NewState(){
+		var s = new State ();
+
+		s.s.g.vertices = new Vertex[]
+		{
+			new Vertex("player"),
+			new Vertex("sausage1",true),
+			new Vertex("sausage2"),
+			new Vertex("island"),
+			new Vertex("ground")
+		};
+
+		s.s.g.edges = new Edge[] 
+		{
+			new Edge("player","ground",true),
+			new Edge("sausage1","ground",true),
+			new Edge("player","sausage1"),
+			new Edge("sausage1","sausage2",true),
+			new Edge("sausage2","island"),
+			new Edge("island","sausage2"),
+		};
+
+		s.s.movements = new List<Movement>
+		{
+			new Movement(1,0,"player"),
+			new Movement(0,0,"ground"),
+		};
+		s.s.unpropagatedMovements = new List<Movement>(s.s.movements);
+		return s;
+	}
+	public State(){
+		s = new GameGraph ();
+	}
 	public State Clone() {
 		var s = new State ();
 		s.s = s.s.Clone ();
@@ -26,7 +60,8 @@ class State
 	private void PropagateForce(Vertex v) {
 		var forces = s.ForcesOn (v);
 		var movement = Force.Aggregate(forces);
-		s.AddMovement (v, movement);
+		movement.target = v;
+		s.AddMovement (movement);
 	}			
 
 	//adds forces from movements
@@ -42,7 +77,6 @@ class State
 		foreach (var v in s.NewlySaturatedVertices()) {
 			PropagateForce (v);
 		}
-		s.unpropagatedForces.Clear ();
 	}
 
 	public void Propagate() {

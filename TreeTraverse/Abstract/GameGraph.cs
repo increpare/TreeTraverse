@@ -110,7 +110,7 @@ class GameGraph
 
     public Edge UnspecifiedPassiveEdge()
     {
-        return null;
+		return g.edges.FirstOrDefault (e => e.passive && getMovement (e.from) == null);
     }
 
     //are there actually 3 possible assumptions here, or only 2? (not moving/moving in sync)

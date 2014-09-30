@@ -9,17 +9,21 @@ class Movement
     public int speed;
     public int rolling;
     public Vertex target;
+
     public bool DependsOn(Force f)
     {
         return false;
     }    
-    public Movement(int speed, int rolling, string target)
+
+	public Movement(string target, int speed, int rolling)
     {
         this.speed = speed;
         this.rolling = rolling;
         this.target = Vertex.Find[target];
     }
-	public Movement(){
+
+	public Movement()
+	{
 	}
 
     public int ContactSpeed()

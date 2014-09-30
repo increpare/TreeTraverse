@@ -52,6 +52,9 @@
     <Compile Include="Abstract\Outline.cs" />
     <Compile Include="Abstract\GameGraph.cs" />
     <Compile Include="Abstract\State.cs" />
+    <Compile Include="Abstract\Direction.cs" />
+    <Compile Include="Abstract\DirectionUtil.cs" />
+    <Compile Include="Abstract\Coord.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

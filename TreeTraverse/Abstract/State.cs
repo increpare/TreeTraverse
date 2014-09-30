@@ -2,45 +2,51 @@
 using System.Linq;
 using System.Collections.Generic;
 
-
 class State
 {
 	public GameGraph s;
 
 
-	public static State NewState(){
+	public static void ProcessString(string dat, State s){
+
+		dat = dat.Trim();
+		var lines = dat.Split(new char[]{'\n'},StringSplitOptions.RemoveEmptyEntries).Select(str=>str.Trim()).ToList();
+		var lineTokens = lines.Select(l=>l.Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries)).ToList();
+		s.s.g.vertices = lineTokens[0].Select( tokenName => new Vertex(tokenName) ).ToArray();
+		List<Edge> eList = new List<Edge>();
+		List<Movement> mList = new List<Movement>();
+
+		var section = 1;
+		for (int i=2;i<lines.Count;i++){
+			if (lines[i].Trim()=="---"){
+				section++;
+				continue;
+			}
+			var lt = lineTokens[i];
+			if (section==1){
+				var e = new Edge(lt[0],lt[1],lt.Length>2?bool.Parse(lt[2]):false);
+				eList.Add (e);
+			} else if (section==2){
+				var m = new Movement (lt[0],int.Parse (lt [1]), int.Parse (lt [2]));
+				mList.Add (m);
+			}
+		}
+		s.s.g.edges = eList.ToArray ();
+		s.s.movements = mList;
+		s.s.unpropagatedMovements = new List<Movement> (s.s.movements);
+	}
+
+	public static State NewState(string dat){
 		var s = new State ();
 
-		s.s.g.vertices = new Vertex[]
-		{
-			new Vertex("player"),
-			new Vertex("sausage1",true),
-			new Vertex("sausage2"),
-			//new Vertex("island"),
-			new Vertex("ground")
-		};
-
-		s.s.g.edges = new Edge[] 
-		{
-			new Edge("ground","player",true),
-			new Edge("ground","sausage1",true),
-			new Edge("player","sausage1"),
-			new Edge("sausage1","sausage2",true),
-		//	new Edge("sausage2","island"),
-		//	new Edge("island","sausage2"),
-		};
-
-		s.s.movements = new List<Movement>
-		{
-			new Movement(1,0,"player"),
-			new Movement(0,0,"ground"),
-		};
-		s.s.unpropagatedMovements = new List<Movement>(s.s.movements);
+		ProcessString (dat, s);
 		return s;
 	}
+
 	public State(){
 		s = new GameGraph ();
 	}
+
 	public State Clone() {
 		var s = new State ();
 		s.s = s.s.Clone ();

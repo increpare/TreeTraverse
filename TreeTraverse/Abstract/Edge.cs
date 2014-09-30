@@ -21,8 +21,18 @@ class Edge
 		return from.GetHashCode()*to.GetHashCode()+passive.GetHashCode();
 	}
 
+	public override string ToString ()
+	{
+		return from.name.ToString () + (passive?" ~> ":" -> ") + to.name.ToString ();
+	}
+
 	public static bool operator ==(Edge v1, Edge v2)
 	{
+		if (System.Object.ReferenceEquals(v1, v2))
+		{
+			return true;
+		}
+
 		return 
 			v1.from == v2.from &&
 			v1.to == v2.to &&

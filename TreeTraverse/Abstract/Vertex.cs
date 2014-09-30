@@ -45,4 +45,9 @@ struct Vertex
 
     public static Dictionary<string, Vertex> Find = new Dictionary<string, Vertex>();
 
+
+	public override string ToString ()
+	{
+		return name.ToString ()+(canRoll?" * ":"");
+	}
 }

@@ -27,12 +27,13 @@ struct Force
     }
 
 
-    public static Movement Aggregate(List<Force> forces)
+	public static Movement Aggregate(List<Force> forces, Vertex target)
     {
-		if (forces.Count == 1) {
-			return forces [0].movement;
-		}
-		return forces [0].movement;
+		var m = new Movement ();
+		m.speed = forces.Max (f => f.movement.speed);
+		m.rolling = 0;
+		m.target=target;
+		return m;
     }
 
 }

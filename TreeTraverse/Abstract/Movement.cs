@@ -19,6 +19,8 @@ class Movement
         this.rolling = rolling;
         this.target = Vertex.Find[target];
     }
+	public Movement(){
+	}
 
     public int ContactSpeed()
     {

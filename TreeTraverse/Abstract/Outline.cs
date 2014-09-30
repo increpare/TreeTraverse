@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 
-class Outline
+static class Outline
 {
 
-	public void RunAlgorithm(State state) {
+	public static void RunAlgorithm(State state) {
 		state.Propagate ();
 
 		Edge e = state.s.UnspecifiedPassiveEdge();
@@ -28,7 +28,7 @@ class Outline
 		state.s.SetState (newStates[0].s);//first one will always assume non-rolling
 	}
 
-	public void DoStuff(State state) {
+	public static void DoStuff(State state) {
 		RunAlgorithm (state);
 	}
 }

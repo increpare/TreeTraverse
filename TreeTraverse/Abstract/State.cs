@@ -16,18 +16,18 @@ class State
 			new Vertex("player"),
 			new Vertex("sausage1",true),
 			new Vertex("sausage2"),
-			new Vertex("island"),
+			//new Vertex("island"),
 			new Vertex("ground")
 		};
 
 		s.s.g.edges = new Edge[] 
 		{
-			new Edge("player","ground",true),
-			new Edge("sausage1","ground",true),
+			new Edge("ground","player",true),
+			new Edge("ground","sausage1",true),
 			new Edge("player","sausage1"),
 			new Edge("sausage1","sausage2",true),
-			new Edge("sausage2","island"),
-			new Edge("island","sausage2"),
+		//	new Edge("sausage2","island"),
+		//	new Edge("island","sausage2"),
 		};
 
 		s.s.movements = new List<Movement>
@@ -59,7 +59,7 @@ class State
 	//assumes v saturated (not sure if this includes incoming active forces, or just passive forces)
 	private void PropagateForce(Vertex v) {
 		var forces = s.ForcesOn (v);
-		var movement = Force.Aggregate(forces);
+		var movement = Force.Aggregate(forces,v);
 		movement.target = v;
 		s.AddMovement (movement);
 	}			
@@ -74,7 +74,8 @@ class State
 
 	//adds movements to saturated vertices
 	private void PropagateForces(){
-		foreach (var v in s.NewlySaturatedVertices()) {
+		var nsv = s.NewlySaturatedVertices ();
+		foreach (var v in nsv) {
 			PropagateForce (v);
 		}
 	}

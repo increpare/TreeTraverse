@@ -90,7 +90,7 @@ class GameGraph
         var result = new List<Vertex>();
         foreach (var v in g.vertices)
         {
-            if (getMovement(v)!=null)
+			if (getMovement(v)!=null)
             {
                 continue;
             }

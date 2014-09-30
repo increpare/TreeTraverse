@@ -17,7 +17,7 @@ class Program
     static void Main(string[] args)
     {
 		var s = State.NewState ();
-		s.Propagate ();
+		Outline.RunAlgorithm (s);
 		Console.WriteLine (s.s.movements.Count);
 		Console.WriteLine ("Hello World");
     }

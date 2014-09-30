@@ -1,10 +1,20 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="TreeTraverse/Abstract/Edge.cs">
+    <Files>
+      <File FileName="TreeTraverse/Abstract/Edge.cs" Line="1" Column="1" />
+      <File FileName="TreeTraverse/Program.cs" Line="10" Column="10" />
+      <File FileName="TreeTraverse/Abstract/State.cs" Line="22" Column="22" />
+      <File FileName="TreeTraverse/Abstract/Graph.cs" Line="5" Column="5" />
+      <File FileName="TreeTraverse/Abstract/Force.cs" Line="38" Column="38" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/stephenlavelle/Documents/TreeTraverse/TreeTraverse/Abstract/State.cs" line="84" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
-    <Watch file="TreeTraverse/Abstract/GameGraph.cs" line="99" offsetX="264" offsetY="1372" expression="v" liveUpdate="False" />
+    <Watch file="TreeTraverse/Abstract/GameGraph.cs" line="99" offsetX="258" offsetY="1372" expression="v" liveUpdate="False" />
   </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

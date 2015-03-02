@@ -1,3 +1,3 @@
 TreeTraverse
 ============
-random algorithm
+random algorithm. ignore.
